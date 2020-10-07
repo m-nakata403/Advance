@@ -114,7 +114,6 @@ class TicketVendingMachine < VendingMachineBase
   include ElectronicMoney
 
   def transaction
-    puts products
     puts '電子マネーのチャージなら1を、切符の購入なら2を押してください'
     input = gets.to_i
 
