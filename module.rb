@@ -53,6 +53,15 @@ class Ticket < Product
   end
 end
 
+module ElectronicMoney
+  #電子マネーをチャージする
+  def charge
+    puts '電子マネーにチャージする金額を入力してください。'
+    amount = gets.to_i
+    puts "#{amount}円がチャージされました。"
+  end
+end
+
 class VendingMachineBase
   def initialize(products)
     @products = products
@@ -101,18 +110,22 @@ class VendingMachineBase
   end
 end
 
-module ElectronicMoney
-  #電子マネーをチャージする
-  def charge
-   puts 'チャージする金額を入力してください。'
-   amount = gets.to_i
-   puts "#{amount}がチャージされました。"
-  end
-end
-
-
 class TicketVendingMachine < VendingMachineBase
   include ElectronicMoney
+
+  def transaction
+    puts products
+    puts '電子マネーのチャージなら1を、切符の購入なら2を押してください'
+    input = gets.to_i
+
+    if input == 1
+      super
+    elsif input == 2
+      charge
+    else
+      puts '電子マネーのチャージなら1を、切符の購入なら2を押してください'
+    end
+  end
 
   private
 
@@ -128,14 +141,6 @@ end
 
 class VendingMachine < VendingMachineBase; end
 
-
-
-# beverages = [
-#   { name: 'コーラ', price: 120 },
-#   { name: 'お茶', price: 100 },
-#   { name: 'お水', price: 80 }
-# ]
-
 tickets = [
   { name: '渋谷', price: 200 },
   { name: '品川', price: 300 },
@@ -145,4 +150,3 @@ tickets = [
 @tickets = tickets.map{ |t| Ticket.new({name: t[:name], price: t[:price]}) }
 tvm = TicketVendingMachine.new(@tickets)
 tvm.transaction
-tvm.charge
